@@ -1,0 +1,172 @@
+#!usr/bin/env ruby
+require 'matrix'
+
+alpha = 0.01
+e = 2.718281828
+zerotoone1 = 0.01
+zerototwo1 = 0.01
+zerotothree1 = 0.01
+zerotofour1 = 0.01
+onetothree1 = -0.04
+onetofour1 = -0.03
+twotothree1 = 0.02
+twotofour1 = 0.05
+zerotofive1 = 0.01
+zerotosix1 = 0.01
+threetofive1 = -0.02
+threetosix1 = -0.01
+fourtofive1 = 0.03
+fourtosix1 = 0.04
+
+zerotoone2 = 0.01
+zerototwo2 = 0.01
+zerotothree2 = 0.01
+zerotofour2 = 0.01
+onetothree2 = -0.04
+onetofour2 = -0.03
+twotothree2 = 0.02
+twotofour2 = 0.05
+zerotofive2 = 0.01
+zerotosix2 = 0.01
+threetofive2 = -0.02
+threetosix2 = -0.01
+fourtofive2 = 0.03
+fourtosix2 = 0.04
+
+a10 = 1
+a11 = 0.11
+a12 = 0.11
+o10 = 1
+o11 = 0.9
+o12 = 0.1
+a20 = 1
+a21 = 0.22
+a22 = 0.11
+o20 = 1
+o21 = 0.1
+o22 = 0.9
+
+user_input = gets.chomp()
+user_input = user_input.to_i
+
+while user_input > 0 do
+
+
+input13 = zerotothree1*a10+a11*onetothree1+a12*twotothree1
+input14 = zerotofour1*a10+a11*onetofour1+a12*twotofour1
+
+input23 = zerotothree2*a20+a21*onetothree2+a22*twotothree2
+input24 = zerotofour2*a20+a21*onetofour2+a22*twotofour2
+
+a13 = (1/(1+e**(-input13)))
+a14 = (1/(1+e**(-input14)))
+
+a23 = (1/(1+e**(-input23)))
+a24 = (1/(1+e**(-input24)))
+
+input15 = a10*zerotofive1+a13*threetofive1+a14*fourtofive1
+input16 = a10*zerotosix1+a13*threetosix1+a14*fourtosix1
+
+input25 = a20*zerotofive2+a23*threetofive2+a24*fourtofive2
+input26 = a20*zerotosix2+a23*threetosix2+a24*fourtosix2
+
+a15 = (1/(1+e**(-input15)))
+a16 = (1/(1+e**(-input16)))
+
+a25 = (1/(1+e**(-input25)))
+a26 = (1/(1+e**(-input26)))
+
+c15 = a15*(1-a15)*(o11-a15)
+c16 = a16*(1-a16)*(o12-a16)
+
+c25 = a25*(1-a25)*(o21-a25)
+c26 = a26*(1-a26)*(o22-a26)
+
+c13 = a13*(1-a13)*(c15*threetofive1+c16*threetosix1)
+c14 = a14*(1-a14)*(c15*fourtofive1+c16*fourtosix1)
+
+c23 = a23*(1-a23)*(c25*threetofive2+c26*threetosix2)
+c24 = a24*(1-a24)*(c25*fourtofive2+c26*fourtosix2)
+puts "C11 = #{a11} * (1- #{a11} ) * (#{c13} * #{onetothree1} + #{c14} * #{onetofour1} )"
+c11 = a11*(1-a11)*(c13*onetothree1+c14*onetofour1)
+c12 = a12*(1-a12)*(c13*twotothree1+c14*twotofour1)
+puts "c11 = #{c11}"
+c21 = a21*(1-a21)*(c23*onetothree2+c24*onetofour2)
+c22 = a22*(1-a22)*(c23*twotothree2+c24*twotofour2)
+
+puts "w01   = #{zerotoone1} + #{alpha} * #{a10} * #{c11} "
+
+zerotoone1 = zerotoone1+alpha*a10*c11
+puts zerotoone1
+zerototwo1 = zerototwo1+alpha*a10*c12
+
+onetothree1 = onetothree1+alpha*a11*c13
+onetofour1 = onetofour1+alpha*a11*c14
+
+twotothree1 = twotothree1+alpha*a12*c13
+twotofour1 = twotofour1+alpha*a12*c14
+
+threetofive1 = threetofive1+alpha*a13*c15
+threetosix1 = threetosix1+alpha*a13*c16
+
+fourtofive1 = fourtofive1+alpha*a14*c15
+fourtosix1 = fourtosix1+alpha*a14*c16
+
+
+
+
+zerotoone2 = zerotoone2+alpha*a20*c21
+
+zerototwo2 = zerototwo2+alpha*a20*c22
+
+onetothree2 = onetothree2+alpha*a21*c23
+onetofour2 = onetofour2+alpha*a21*c24
+
+twotothree2 = twotothree2+alpha*a22*c23
+twotofour2 = twotofour2+alpha*a22*c24
+
+threetofive2 = threetofive2+alpha*a23*c25
+threetosix2 = threetosix2+alpha*a23*c26
+
+fourtofive2 = fourtofive2+alpha*a24*c25
+fourtosix2 = fourtosix2+alpha*a24*c26
+
+user_input = user_input - 1
+
+end
+=begin
+File.open('output_filehw9.txt', 'a') do |output|
+	output.puts "Error 5, example 1: #{c15}"
+	output.puts "Error 6, example 1: #{c16}"
+	output.puts "Weight 13, example 1: #{onetothree1}"
+	output.puts "Weight 14, example 1: #{onetofour1}"
+	output.puts "Weight 23, example 1: #{twotothree1}"
+	output.puts "Weight 24, example 1: #{twotofour1}"
+	output.puts "Weight 35, example 1: #{threetofive1}"
+	output.puts "Weight 36, example 1: #{threetosix1}"
+	output.puts "Weight 45, example 1: #{fourtofive1}"
+	output.puts "Weight 46, example 1: #{fourtosix1}"
+	puts ""
+	output.puts "Error 5, example 2: #{c25}"
+	output.puts "Error 6, example 2: #{c26}"
+	output.puts "Weight 13, example 2: #{onetothree2}"
+	output.puts "Weight 14, example 2: #{onetofour2}"
+	output.puts "Weight 23, example 2: #{twotothree2}"
+	output.puts "Weight 24, example 2: #{twotofour2}"
+	output.puts "Weight 35, example 2: #{threetofive2}"
+	output.puts "Weight 36, example 2: #{threetosix2}"
+	output.puts "Weight 45, example 2: #{fourtofive2}"
+	output.puts "Weight 46, example 2: #{fourtosix2}"
+
+	puts ""
+end
+=end
+
+
+puts "W01 = #{zerotoone1}"
+
+puts "Error 5, example 1: #{c15}"
+puts "Error 6, example 1: #{c16}"
+
+puts "Error 5, example 2: #{c25}"
+puts "Error 6, example 2: #{c26}"
